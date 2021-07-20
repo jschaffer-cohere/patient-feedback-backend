@@ -24,9 +24,9 @@ public class MongoPatientQuestionnaireListener extends AbstractMongoEventListene
     public void onAfterSave(AfterSaveEvent<PatientQuestionnaire> event) {
 
         PatientQuestionnaire patientQuestionnaire = event.getSource();
-        boolean isInitialSave = patientQuestionnaire.getCreatedDateTime() == null;
+        boolean hasSentimentScore = patientQuestionnaire.getSentimentScore() != null;
         System.out.println("onAfterSave(" + patientQuestionnaire + ", " + event.getDocument());
-        if (isInitialSave) {
+        if (!hasSentimentScore) {
             // Send request to flask app
             Double sentimentScore = patientQuestionnaireSentimentService.getSentimentAnalysisScore(patientQuestionnaire);
             patientQuestionnaire.setCreatedDateTime(Instant.now());
