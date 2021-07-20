@@ -25,6 +25,7 @@ public class MongoPatientQuestionnaireListener extends AbstractMongoEventListene
         PatientQuestionnaire patientQuestionnaire = event.getSource();
         // Integer sentimentScore = patientQuestionnaireSentimentService.getSentimentAnalysisScore(patientQuestionnaire);
         patientQuestionnaire.setSentimentScore(0.5);
-        patientQuestionnaireRepository.save(patientQuestionnaire);
+        // patientQuestionnaireRepository.save(patientQuestionnaire);
+        System.out.println(patientQuestionnaire);
     }
 }

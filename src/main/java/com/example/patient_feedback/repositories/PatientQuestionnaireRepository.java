@@ -18,5 +18,4 @@ public interface PatientQuestionnaireRepository extends MongoRepository<PatientQ
 
     PatientQuestionnaire findPatientQuestionnaireById(@Param("id") String id);
 
-
 }

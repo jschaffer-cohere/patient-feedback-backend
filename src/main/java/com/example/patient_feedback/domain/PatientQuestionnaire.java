@@ -1,14 +1,9 @@
 package com.example.patient_feedback.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.Instant;
 
 @AllArgsConstructor
 @Getter
@@ -31,11 +26,5 @@ public class PatientQuestionnaire {
     private String response;
 
     private Double sentimentScore;
-
-    @CreatedDate
-    private Instant createdDateTime;
-
-    @LastModifiedDate
-    private Instant updatedDateTime;
 
 }
