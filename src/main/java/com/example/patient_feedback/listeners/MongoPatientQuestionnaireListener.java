@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventLis
 import org.springframework.data.mongodb.core.mapping.event.AfterSaveEvent;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+
 @Component
 public class MongoPatientQuestionnaireListener extends AbstractMongoEventListener<PatientQuestionnaire>
 {
@@ -20,12 +22,17 @@ public class MongoPatientQuestionnaireListener extends AbstractMongoEventListene
 
     @Override
     public void onAfterSave(AfterSaveEvent<PatientQuestionnaire> event) {
-        System.out.println("onAfterSave(" + event.getSource() + ", " + event.getDocument());
-        // Send request to flask app
+
         PatientQuestionnaire patientQuestionnaire = event.getSource();
-        // Integer sentimentScore = patientQuestionnaireSentimentService.getSentimentAnalysisScore(patientQuestionnaire);
-        patientQuestionnaire.setSentimentScore(0.5);
-        // patientQuestionnaireRepository.save(patientQuestionnaire);
-        System.out.println(patientQuestionnaire);
+        boolean isInitialSave = patientQuestionnaire.getCreatedDateTime() == null;
+        System.out.println("onAfterSave(" + patientQuestionnaire + ", " + event.getDocument());
+        if (isInitialSave) {
+            // Send request to flask app
+            Double sentimentScore = patientQuestionnaireSentimentService.getSentimentAnalysisScore(patientQuestionnaire);
+            patientQuestionnaire.setCreatedDateTime(Instant.now());
+            patientQuestionnaire.setSentimentScore(sentimentScore);
+            PatientQuestionnaire updatedPatientQuestionnaire = patientQuestionnaireRepository.save(patientQuestionnaire);
+            System.out.println(updatedPatientQuestionnaire);
+        }
     }
 }

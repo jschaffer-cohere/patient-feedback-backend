@@ -13,16 +13,17 @@ public class PatientQuestionnaireSentimentService
     @Autowired
     private RestTemplate restTemplate;
 
-    public Integer getSentimentAnalysisScore(PatientQuestionnaire patientQuestionnaire)
+    public Double getSentimentAnalysisScore(PatientQuestionnaire patientQuestionnaire)
     {
-        String API_URL = "localhost:1739/sentiment/%s";
+        String API_URL = "http://127.0.0.1:1739/sentiment/";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
-                .fromUriString(String.format(API_URL, patientQuestionnaire.getResponse()));
+                .fromUriString(API_URL);
 
         try {
-            String sentimentScore = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
+            System.out.printf("Sending request to %s", uriBuilder.toUriString() + patientQuestionnaire.getResponse());
+            String sentimentScore = restTemplate.getForObject(uriBuilder.toUriString() + patientQuestionnaire.getResponse(), String.class);
             System.out.printf("Sentiment score for %s : %s%n", patientQuestionnaire.getResponse(), sentimentScore);
-            return sentimentScore != null ? Integer.valueOf(sentimentScore) : null;
+            return sentimentScore != null ? Double.valueOf(sentimentScore) : null;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
